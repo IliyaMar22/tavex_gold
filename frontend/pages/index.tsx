@@ -6,8 +6,50 @@ const TavexGoldSimulation = () => {
   const [numSimulations, setNumSimulations] = useState(10000);
   const [isRunning, setIsRunning] = useState(false);
   const [isLoadingData, setIsLoadingData] = useState(false);
-  const [results, setResults] = useState(null);
-  const [historicalData, setHistoricalData] = useState(null);
+  const [results, setResults] = useState<Record<string, {
+    years: number;
+    totalInvested: number;
+    totalGrams: number;
+    bonusGrams: number;
+    bonusImpact: number;
+    median: number;
+    p25: number;
+    p75: number;
+    p5: number;
+    p95: number;
+    medianROI: number;
+    medianAnnualized: number;
+    breakEvenProbability: number;
+    histogram: Array<{
+      value: number;
+      count: number;
+      label: string;
+    }>;
+    samplePath: {
+      totalGrams: number;
+      totalInvested: number;
+      finalValue: number;
+      roi: number;
+      annualizedReturn: number;
+      gramsHistory: number[];
+      valueHistory: number[];
+    };
+  }> | null>(null);
+  const [historicalData, setHistoricalData] = useState<{
+    prices: number[];
+    dates: string[];
+    returns: number[];
+    statistics: {
+      meanMonthlyReturn: number;
+      stdMonthlyReturn: number;
+      annualizedReturn: number;
+      annualizedVolatility: number;
+      skewness: number;
+      kurtosis: number;
+      currentPrice: number;
+      dataPoints: number;
+    };
+  } | null>(null);
   const [dataSource, setDataSource] = useState('fetching');
 
   // Fetch historical gold prices from multiple sources
