@@ -408,7 +408,7 @@ const TavexGoldSimulation = () => {
                     interval={Math.floor(priceChartData.length / 10)}
                   />
                   <YAxis />
-                  <Tooltip formatter={(value) => [`€${value.toFixed(2)}/g`, 'Price']} />
+                  <Tooltip formatter={(value) => [`€${Number(value).toFixed(2)}/g`, 'Price']} />
                   <Line type="monotone" dataKey="price" stroke="#f59e0b" strokeWidth={2} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
