@@ -96,14 +96,15 @@ const TavexGoldSimulation = () => {
     const prices = [startPrice];
     const dates = [];
 
-    // Real gold statistics from literature:
-    // - Long-term drift: ~7.5% annually
-    // - Volatility: ~16% annually
+    // Real gold statistics from 46-year historical data (EUR):
+    // - Compound Annual Growth Rate (CAGR): 6.35%
+    // - Standard Deviation (Volatility): 17.42%
+    // - Sharpe Ratio: 0.39
     // - Mean reversion tendency
     // - Fat tails (extreme moves more common than normal distribution)
 
-    const annualDrift = 0.075;
-    const annualVol = 0.16;
+    const annualDrift = 0.0635;  // 6.35% CAGR from real data
+    const annualVol = 0.1742;    // 17.42% volatility from real data
     const monthlyDrift = annualDrift / 12;
     const monthlyVol = annualVol / Math.sqrt(12);
     const meanReversionSpeed = 0.02;
