@@ -195,11 +195,20 @@ const TavexGoldSimulation = () => {
   };
 
   // Simulate a single path using real historical statistics
-  const simulatePath = (months, stats) => {
+  const simulatePath = (months: number, stats: {
+    meanMonthlyReturn: number;
+    stdMonthlyReturn: number;
+    annualizedReturn: number;
+    annualizedVolatility: number;
+    skewness: number;
+    kurtosis: number;
+    currentPrice: number;
+    dataPoints: number;
+  }) => {
     let totalGrams = 0;
     let totalInvested = 0;
-    const gramsHistory = [];
-    const valueHistory = [];
+    const gramsHistory: number[] = [];
+    const valueHistory: number[] = [];
 
     // Start from current Tavex buy price
     let currentPrice = tavexParams.buyPrice;
@@ -257,11 +266,11 @@ const TavexGoldSimulation = () => {
 
     setTimeout(() => {
       const periods = [36, 60, 120]; // 3, 5, 10 years
-      const allResults = {};
+      const allResults: Record<string, any> = {};
       const stats = historicalData.statistics;
 
-      periods.forEach(months => {
-        const simResults = [];
+        periods.forEach((months: number) => {
+        const simResults: any[] = [];
 
         for (let i = 0; i < numSimulations; i++) {
           simResults.push(simulatePath(months, stats));
@@ -275,7 +284,7 @@ const TavexGoldSimulation = () => {
         const annualizedReturns = simResults.map(r => r.annualizedReturn);
 
         // Calculate statistics
-        const getPercentile = (arr, p) => arr[Math.floor(arr.length * p)];
+        const getPercentile = (arr: number[], p: number) => arr[Math.floor(arr.length * p)];
 
         const median = getPercentile(finalValues, 0.5);
         const p25 = getPercentile(finalValues, 0.25);
@@ -302,13 +311,13 @@ const TavexGoldSimulation = () => {
         const maxVal = finalValues[finalValues.length - 1];
         const binSize = (maxVal - minVal) / histogramBins;
 
-        const histogram = Array(histogramBins).fill(0);
-        finalValues.forEach(val => {
+        const histogram: number[] = Array(histogramBins).fill(0);
+        finalValues.forEach((val: number) => {
           const binIndex = Math.min(Math.floor((val - minVal) / binSize), histogramBins - 1);
           histogram[binIndex]++;
         });
 
-        const histogramData = histogram.map((count, i) => ({
+        const histogramData = histogram.map((count: number, i: number) => ({
           value: minVal + (i + 0.5) * binSize,
           count: count,
           label: `€${Math.round(minVal + i * binSize / 1000)}k`
@@ -339,12 +348,12 @@ const TavexGoldSimulation = () => {
   };
 
   // Format currency
-  const fmt = (val) => `€${val.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
-  const fmtPct = (val) => `${val.toFixed(2)}%`;
+  const fmt = (val: number) => `€${val.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}`;
+  const fmtPct = (val: number) => `${val.toFixed(2)}%`;
 
   // Prepare historical price chart data
   const priceChartData = historicalData ? 
-    historicalData.dates.slice(-120).map((date, i) => ({
+    historicalData.dates.slice(-120).map((date: string, i: number) => ({
       date: date.slice(0, 7),
       price: historicalData.prices[historicalData.prices.length - 120 + i]
     })) : [];
@@ -450,7 +459,7 @@ const TavexGoldSimulation = () => {
           </div>
         </div>
 
-        {results && Object.keys(results).map(months => {
+        {results && Object.keys(results).map((months: string) => {
           const r = results[months];
           return (
             <div key={months} className="bg-white rounded-lg shadow-xl p-6 mb-6">
