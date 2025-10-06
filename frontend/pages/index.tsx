@@ -181,9 +181,9 @@ const TavexGoldSimulation = () => {
     buyPrice: 124.24,
     sellPrice: 111.97,
     spread: 0.0988,
-    monthlyGrams: 4,
-    subscriptions: 4,
-    bonusGramsPerYear: 4
+    gramsPerSubscription: 1,  // 1 gram per subscription per month
+    subscriptions: 4,           // 4 subscriptions
+    bonusPerSubscription: 1     // 1 bonus gram per subscription per year
   };
 
   // Box-Muller transform for normal distribution
@@ -223,14 +223,14 @@ const TavexGoldSimulation = () => {
       // Ensure price doesn't go negative or unreasonably high
       currentPrice = Math.max(20, Math.min(500, currentPrice));
 
-      // Purchase monthly allocation
-      const gramsPurchased = tavexParams.monthlyGrams * tavexParams.subscriptions;
+      // Purchase monthly allocation: 4 subscriptions × 1 gram = 4 grams/month
+      const gramsPurchased = tavexParams.gramsPerSubscription * tavexParams.subscriptions;
       totalGrams += gramsPurchased;
       totalInvested += gramsPurchased * tavexParams.buyPrice;
 
-      // Add bonus grams every 12 months
+      // Add bonus grams every 12 months: 4 subscriptions × 1 bonus gram = 4 bonus grams/year
       if (month % 12 === 0) {
-        totalGrams += tavexParams.bonusGramsPerYear;
+        totalGrams += tavexParams.bonusPerSubscription * tavexParams.subscriptions;
       }
 
       // Calculate market value at Tavex sell price (accounting for spread)
@@ -297,7 +297,7 @@ const TavexGoldSimulation = () => {
 
         // Calculate bonus gram impact
         const totalGramsWithBonus = simResults[0].totalGrams;
-        const totalGramsWithoutBonus = (months / 12) * 12 * tavexParams.subscriptions;
+        const totalGramsWithoutBonus = (months / 12) * 12 * tavexParams.subscriptions * tavexParams.gramsPerSubscription;
         const bonusGramsTotal = totalGramsWithBonus - totalGramsWithoutBonus;
         const bonusImpact = (bonusGramsTotal / totalGramsWithoutBonus) * 100;
 
@@ -367,7 +367,7 @@ const TavexGoldSimulation = () => {
             Tavex Gold Subscription Monte Carlo Simulator
           </h1>
           <p className="text-gray-600 mb-4">
-            Simulating monthly investment of 4g/month × 4 subscriptions = 16g/month + 4 bonus grams/year
+            Simulating 4 subscriptions × 1g/month = 4g/month + 4 bonus grams/year (1 per subscription)
           </p>
 
           {isLoadingData && (
